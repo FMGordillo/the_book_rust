@@ -6,6 +6,14 @@ struct Log {
     guessed_number: u32,
 }
 
+fn read_line() -> String {
+    let mut value = String::new();
+    io::stdin()
+        .read_line(&mut value)
+        .expect("Failed to read line");
+    value
+}
+
 fn start_game(logs: &mut Vec<Log>) {
     println!("Guess the number!");
 
@@ -14,11 +22,7 @@ fn start_game(logs: &mut Vec<Log>) {
     loop {
         println!("Please input your guess.");
 
-        let mut guess = String::new();
-
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
+        let guess = read_line();
 
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
@@ -43,14 +47,12 @@ fn start_game(logs: &mut Vec<Log>) {
 
     println!("Do you want to see the logs? [y/N]");
 
-    let mut answer = String::new();
-    io::stdin()
-        .read_line(&mut answer)
-        .expect("Failed to read line");
+    let answer = read_line();
 
     match answer.trim().to_lowercase().as_str() {
         "y" | "yes" => {
             println!("You've guessed for {} times", logs.len());
+
             for (i, log) in logs.iter().enumerate() {
                 if logs.len() == i + 1 {
                     println!("{}", log.guessed_number);
@@ -59,6 +61,7 @@ fn start_game(logs: &mut Vec<Log>) {
                 }
             }
         }
+
         _ => (),
     }
 }
@@ -69,14 +72,12 @@ fn main() {
         start_game(&mut logs);
         println!("Do you want to play again? [Y/n]");
 
-        let mut answer = String::new();
-        io::stdin()
-            .read_line(&mut answer)
-            .expect("Failed to read line");
+        let answer = read_line();
 
         match answer.trim().to_lowercase().as_str() {
             "n" | "no" => break,
             _ => continue,
         }
     }
+    println!("Thank you so much for trying my game!");
 }
