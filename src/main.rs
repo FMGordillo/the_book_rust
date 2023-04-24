@@ -11,7 +11,7 @@ fn read_line() -> String {
     io::stdin()
         .read_line(&mut value)
         .expect("Failed to read line");
-    value
+    value.to_lowercase()
 }
 
 fn start_game(logs: &mut Vec<Log>) {
@@ -30,6 +30,7 @@ fn start_game(logs: &mut Vec<Log>) {
         };
 
         println!("You guessed {}", guess);
+
         let log = Log {
             guessed_number: guess,
         };
@@ -49,20 +50,16 @@ fn start_game(logs: &mut Vec<Log>) {
 
     let answer = read_line();
 
-    match answer.trim().to_lowercase().as_str() {
-        "y" | "yes" => {
-            println!("You've guessed for {} times", logs.len());
+    if let "y" | "yes" = answer.trim().to_lowercase().as_str() {
+        println!("You've guessed for {} times", logs.len());
 
-            for (i, log) in logs.iter().enumerate() {
-                if logs.len() == i + 1 {
-                    println!("{}", log.guessed_number);
-                } else {
-                    print!("{} | ", log.guessed_number);
-                }
+        for (i, log) in logs.iter().enumerate() {
+            if logs.len() == i + 1 {
+                println!("{}", log.guessed_number);
+            } else {
+                print!("{} | ", log.guessed_number);
             }
         }
-
-        _ => (),
     }
 }
 
@@ -74,9 +71,10 @@ fn main() {
 
         let answer = read_line();
 
-        match answer.trim().to_lowercase().as_str() {
-            "n" | "no" => break,
-            _ => continue,
+        if let "n" | "no" = answer.trim().to_lowercase().as_str() {
+            break;
+        } else {
+            continue;
         }
     }
     println!("Thank you so much for trying my game!");
